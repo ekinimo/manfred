@@ -1,6 +1,6 @@
 package manfred.manfreditor.map;
 
-import manfred.game.graphics.ImageLoader;
+import manfred.manfreditor.ImageLoader;
 import manfred.manfreditor.exception.InvalidInputException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

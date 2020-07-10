@@ -25,7 +25,7 @@ public class ManfreditorApplication extends Application {
         Parent root = fxWeaver.loadView(Controller.class);
 
         primaryStage.setTitle("Manfreditor");
-        primaryStage.setScene(new Scene(root, 1200, 1200));
+        primaryStage.setScene(new Scene(root, 1600, 1200));
         primaryStage.show();
     }
 

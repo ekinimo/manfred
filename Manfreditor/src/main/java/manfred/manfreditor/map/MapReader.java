@@ -1,7 +1,7 @@
 package manfred.manfreditor.map;
 
 import manfred.game.Game;
-import manfred.game.graphics.ImageLoader;
+import manfred.manfreditor.ImageLoader;
 import manfred.manfreditor.exception.InvalidInputException;
 import org.json.JSONArray;
 import org.json.JSONException;

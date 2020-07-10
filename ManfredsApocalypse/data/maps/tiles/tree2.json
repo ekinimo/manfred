@@ -1,3 +1,6 @@
 {
-  "blocksWidth": 2
+  "blocksWidth": 2,
+  "mapStructure": [
+    [0, 0]
+  ]
 }
