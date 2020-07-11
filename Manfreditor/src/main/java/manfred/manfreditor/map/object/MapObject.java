@@ -15,6 +15,18 @@ public class MapObject {
         this.image = image;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getBlocksWidth() {
+        return blocksWidth;
+    }
+
+    public boolean[][] getMapStructure() {
+        return mapStructure;
+    }
+
     public Image getImage() {
         return image;
     }

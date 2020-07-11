@@ -8,10 +8,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import manfred.manfreditor.exception.InvalidInputException;
-import manfred.manfreditor.map.*;
+import manfred.manfreditor.map.MapPane;
+import manfred.manfreditor.map.MapReader;
 import manfred.manfreditor.map.object.MapObject;
 import manfred.manfreditor.map.object.MapObjectReader;
 import manfred.manfreditor.map.object.MapObjectsPane;
@@ -19,14 +18,11 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Optional;
 
 @Component
 @FxmlView("manfreditor.fxml")
 public class Controller {
-    private static final Color NOT_ACCESSIBLE_COLOR = new Color(1, 0, 0, 0.4);
-    private static final Color ACCESSIBLE_COLOR = new Color(0, 0, 0, 0.0);
     public static final int OBJECTS_GRID_SIZE = 100;
 
     public Button loadMapButton;
@@ -37,9 +33,6 @@ public class Controller {
     private final MapReader mapReader;
     private final MapObjectReader mapObjectReader;
     public Button loadMapObjectButton;
-    private Map map;
-
-    private final HashMap<String, MapObject> mapObjectStorage = new HashMap<>();
 
     public Controller(MapReader mapReader, MapObjectReader mapObjectReader) {
         this.mapReader = mapReader;
@@ -58,35 +51,10 @@ public class Controller {
 
     private void loadMap(String mapName) {
         try {
-            map = mapReader.load(mapName);
-
-            int horizontalSize = map.getArray().length;
-            int verticalSize = map.getArray()[0].length;
-            mapPane.resetWithSize(horizontalSize, verticalSize);
-
-            for (int x = 0; x < horizontalSize; x++) {
-                for (int y = 0; y < verticalSize; y++) {
-                    mapPane.addTile(
-                        createMapTile(map.getArray()[x][y]),
-                        x,
-                        y
-                    );
-                }
-            }
+            mapPane.setMap(mapReader.load(mapName), this);
         } catch (InvalidInputException | IOException e) {
             showErrorMessagePopup(e.getMessage());
         }
-    }
-
-    private Rectangle createMapTile(boolean isAccessible) {
-        Rectangle rectangle = new Rectangle(MapPane.PIXEL_BLOCK_SIZE, MapPane.PIXEL_BLOCK_SIZE);
-        rectangle.setFill(
-            isAccessible
-                ? ACCESSIBLE_COLOR
-                : NOT_ACCESSIBLE_COLOR
-        );
-        rectangle.setOnMouseClicked(this::onMapTileClicked);
-        return rectangle;
     }
 
     private void showErrorMessagePopup(String message) {
@@ -102,12 +70,7 @@ public class Controller {
         int x = GridPane.getColumnIndex(source);
         int y = GridPane.getRowIndex(source);
 
-        map.getArray()[x][y] = !map.getArray()[x][y];
-        mapPane.getTile(x, y).setFill(
-            map.getArray()[x][y]
-                ? ACCESSIBLE_COLOR
-                : NOT_ACCESSIBLE_COLOR
-        );
+        mapPane.tileClicked(x, y, mapObjectsPane.getSelectedObject());
     }
 
     public void onObjectTileClicked(MouseEvent mouseEvent) {
@@ -131,7 +94,6 @@ public class Controller {
         try {
             MapObject mapObject = mapObjectReader.load(name);
 
-            mapObjectStorage.put(name, mapObject);
             mapObjectsPane.addMapObject(mapObject, this);
         } catch (InvalidInputException | IOException e) {
             showErrorMessagePopup(e.getMessage());

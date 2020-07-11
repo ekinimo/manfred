@@ -65,4 +65,8 @@ public class MapObjectsPane extends GridPane {
         selectedObject = newSelection;
         selectedObject.select();
     }
+
+    public MapObjectContainer getSelectedObject() {
+        return selectedObject;
+    }
 }
