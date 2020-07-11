@@ -1,7 +1,8 @@
-package manfred.manfreditor.map;
+package manfred.manfreditor.map.object;
 
 import manfred.manfreditor.ImageLoader;
 import manfred.manfreditor.exception.InvalidInputException;
+import manfred.manfreditor.map.MapReader;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

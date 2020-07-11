@@ -1,6 +1,6 @@
 package manfred.manfreditor;
 
-import manfred.manfreditor.map.MapObjectReader;
+import manfred.manfreditor.map.object.MapObjectReader;
 import manfred.manfreditor.map.MapReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

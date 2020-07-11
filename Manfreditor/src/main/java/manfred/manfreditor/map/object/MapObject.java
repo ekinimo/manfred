@@ -1,4 +1,4 @@
-package manfred.manfreditor.map;
+package manfred.manfreditor.map.object;
 
 import javafx.scene.image.Image;
 

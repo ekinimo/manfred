@@ -6,14 +6,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import manfred.manfreditor.exception.InvalidInputException;
 import manfred.manfreditor.map.*;
+import manfred.manfreditor.map.object.MapObject;
+import manfred.manfreditor.map.object.MapObjectReader;
+import manfred.manfreditor.map.object.MapObjectsPane;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
@@ -26,12 +27,12 @@ import java.util.Optional;
 public class Controller {
     private static final Color NOT_ACCESSIBLE_COLOR = new Color(1, 0, 0, 0.4);
     private static final Color ACCESSIBLE_COLOR = new Color(0, 0, 0, 0.0);
-    private static final int OBJECTS_GRID_SIZE = 100;
+    public static final int OBJECTS_GRID_SIZE = 100;
 
     public Button loadMapButton;
     public MapPane mapPane;
     public ScrollPane mapPaneContainer;
-    public GridPane objectsContainer;
+    public MapObjectsPane mapObjectsPane;
 
     private final MapReader mapReader;
     private final MapObjectReader mapObjectReader;
@@ -124,16 +125,7 @@ public class Controller {
             MapObject mapObject = mapObjectReader.load(name);
 
             mapObjectStorage.put(name, mapObject);
-
-            Image image = mapObject.getImage();
-            ImageView imageView = new ImageView(image);
-            if (image.getHeight() > image.getWidth()) {
-                imageView.setFitHeight(OBJECTS_GRID_SIZE);
-            } else {
-                imageView.setFitWidth(OBJECTS_GRID_SIZE);
-            }
-
-            objectsContainer.add(imageView, 0, 0);
+            mapObjectsPane.addMapObject(mapObject);
         } catch (InvalidInputException | IOException e) {
             showErrorMessagePopup(e.getMessage());
         }

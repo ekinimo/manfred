@@ -4,28 +4,22 @@
 <?import javafx.scene.layout.*?>
 <?import manfred.manfreditor.map.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="manfred.manfreditor.Controller">
+<?import manfred.manfreditor.map.object.MapObjectsPane?>
+<AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="manfred.manfreditor.Controller">
     <TabPane prefHeight="1200" prefWidth="1600.0" tabClosingPolicy="UNAVAILABLE">
         <Tab text="Map Editor">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1200" prefWidth="1600">
-                <Button fx:id="loadMapButton" layoutX="34.0" layoutY="25.0" mnemonicParsing="false" onAction="#loadMapDialogue" text="Lade Map" />
-                <ScrollPane fx:id="mapPaneContainer" hvalue="0.23" layoutX="34.0" layoutY="71.0" pannable="true" prefHeight="1000" prefWidth="1000" vvalue="0.18">
-                    <MapPane fx:id="mapPane" gridLinesVisible="true" minHeight="0" minWidth="0" prefHeight="0" prefWidth="0" />
+                <Button fx:id="loadMapButton" layoutX="34.0" layoutY="25.0" mnemonicParsing="false"
+                        onAction="#loadMapDialogue" text="Lade Map"/>
+                <ScrollPane fx:id="mapPaneContainer" hvalue="0.23" layoutX="34.0" layoutY="71.0" pannable="true"
+                            prefHeight="1000" prefWidth="1000" vvalue="0.18">
+                    <MapPane fx:id="mapPane" gridLinesVisible="true" minHeight="0" minWidth="0" prefHeight="0"
+                             prefWidth="0"/>
                 </ScrollPane>
-            <GridPane fx:id="objectsContainer" gridLinesVisible="true" layoutX="1069.0" layoutY="71.0">
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="100.0" />
-                  <RowConstraints minHeight="10.0" prefHeight="100.0" />
-                  <RowConstraints minHeight="10.0" prefHeight="100.0" />
-                  <RowConstraints minHeight="10.0" prefHeight="100.0" />
-               </rowConstraints>
-               <columnConstraints>
-                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-            </GridPane>
-            <Button fx:id="loadMapObjectButton" layoutX="1057.0" layoutY="25.0" mnemonicParsing="false" onAction="#loadMapObjectDialogue" text="Lade Mapobjekt" />
+                <MapObjectsPane fx:id="mapObjectsPane" gridLinesVisible="true" layoutX="1069.0" layoutY="71.0"/>
+                <Button fx:id="loadMapObjectButton" layoutX="1057.0" layoutY="25.0" mnemonicParsing="false"
+                        onAction="#loadMapObjectDialogue" text="Lade Mapobjekt"/>
             </AnchorPane>
         </Tab>
     </TabPane>
