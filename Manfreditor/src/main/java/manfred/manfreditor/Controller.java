@@ -85,7 +85,7 @@ public class Controller {
                 ? ACCESSIBLE_COLOR
                 : NOT_ACCESSIBLE_COLOR
         );
-        rectangle.setOnMouseClicked(this::onGridPaneClicked);
+        rectangle.setOnMouseClicked(this::onMapTileClicked);
         return rectangle;
     }
 
@@ -97,7 +97,7 @@ public class Controller {
         alert.showAndWait();
     }
 
-    public void onGridPaneClicked(MouseEvent mouseEvent) {
+    public void onMapTileClicked(MouseEvent mouseEvent) {
         Node source = (Node) mouseEvent.getSource();
         int x = GridPane.getColumnIndex(source);
         int y = GridPane.getRowIndex(source);
@@ -108,6 +108,13 @@ public class Controller {
                 ? ACCESSIBLE_COLOR
                 : NOT_ACCESSIBLE_COLOR
         );
+    }
+
+    public void onObjectTileClicked(MouseEvent mouseEvent) {
+        Node source = (Node) mouseEvent.getSource();
+        int x = GridPane.getColumnIndex(source);
+        int y = GridPane.getRowIndex(source);
+        mapObjectsPane.select(x, y);
     }
 
     public void loadMapObjectDialogue(ActionEvent actionEvent) {
@@ -125,7 +132,7 @@ public class Controller {
             MapObject mapObject = mapObjectReader.load(name);
 
             mapObjectStorage.put(name, mapObject);
-            mapObjectsPane.addMapObject(mapObject);
+            mapObjectsPane.addMapObject(mapObject, this);
         } catch (InvalidInputException | IOException e) {
             showErrorMessagePopup(e.getMessage());
         }

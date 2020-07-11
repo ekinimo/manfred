@@ -11,10 +11,11 @@ public class MapObjectContainer {
     private final MapObject mapObject;
     private final Rectangle rectangle;
 
-    public MapObjectContainer(MapObject mapObject) {
+    public MapObjectContainer(MapObject mapObject, Controller controller) {
         this.mapObject = mapObject;
         this.rectangle = new Rectangle(Controller.OBJECTS_GRID_SIZE, Controller.OBJECTS_GRID_SIZE);
         rectangle.setFill(NOT_SELECTED_COLOR);
+        rectangle.setOnMouseClicked(controller::onObjectTileClicked);
     }
 
     public MapObject getMapObject() {

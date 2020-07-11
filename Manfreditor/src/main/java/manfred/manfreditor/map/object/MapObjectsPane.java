@@ -17,16 +17,18 @@ public class MapObjectsPane extends GridPane {
     private int nextFreeTileX = 0;
     private int nextFreeTileY = 0;
 
-    public void addMapObject(MapObject mapObject) {
+    private MapObjectContainer selectedObject = null;
+
+    public void addMapObject(MapObject mapObject, Controller controller) {
         if (nextFreeTileY + 1 > objectContainers.size()) {
             objectContainers.add(nextFreeTileY, new MapObjectContainer[NUMBER_OF_COLUMNS]);
         }
 
-        MapObjectContainer mapObjectContainer = new MapObjectContainer(mapObject);
+        MapObjectContainer mapObjectContainer = new MapObjectContainer(mapObject, controller);
         objectContainers.get(nextFreeTileY)[nextFreeTileX] = mapObjectContainer;
 
-        this.add(mapObjectContainer.getRectangle(), nextFreeTileX, nextFreeTileY);
         this.addImage(mapObject.getImage());
+        this.add(mapObjectContainer.getRectangle(), nextFreeTileX, nextFreeTileY);
 
         nextFreeTileX++;
         if (nextFreeTileX >= NUMBER_OF_COLUMNS) {
@@ -47,5 +49,20 @@ public class MapObjectsPane extends GridPane {
         this.add(imageView, nextFreeTileX, nextFreeTileY);
         setValignment(imageView, VPos.CENTER);
         setHalignment(imageView, HPos.CENTER);
+    }
+
+    public void select(int x, int y) {
+        if (selectedObject != null) {
+            selectedObject.deselect();
+        }
+
+        MapObjectContainer newSelection = objectContainers.get(y)[x];
+        if (newSelection.equals(selectedObject)) {
+            selectedObject = null;
+            return;
+        }
+
+        selectedObject = newSelection;
+        selectedObject.select();
     }
 }
