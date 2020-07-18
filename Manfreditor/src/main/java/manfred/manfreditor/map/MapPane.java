@@ -3,13 +3,13 @@ package manfred.manfreditor.map;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import manfred.manfreditor.Controller;
 import manfred.manfreditor.map.object.MapObject;
 import manfred.manfreditor.map.object.MapObjectContainer;
+import manfred.manfreditor.map.object.MapObjectImageView;
 
 public class MapPane extends GridPane {
     private static final Color NOT_ACCESSIBLE_COLOR = new Color(1, 0, 0, 0.4);
@@ -74,20 +74,7 @@ public class MapPane extends GridPane {
         if (selectedObject == null) {
             switchTile(x, y);
         } else {
-            MapObject mapObject = selectedObject.getMapObject();
-
-            Image image = mapObject.getImage();
-            double heightToWidthRatio = image.getHeight() / image.getWidth();
-
-            ImageView imageView = new ImageView(image);
-            imageView.setPreserveRatio(true);
-            imageView.setFitWidth(PIXEL_BLOCK_SIZE * mapObject.getBlocksWidth());
-
-            int rowspan = (int) Math.ceil(heightToWidthRatio) * mapObject.getBlocksWidth();
-            this.add(imageView, x, y - rowspan + 1, mapObject.getBlocksWidth(), rowspan);
-            setValignment(imageView, VPos.BOTTOM);
-
-            switchTiles(mapObject.getMapStructure(), x, y);
+            addMapObject(x, y, selectedObject.getMapObject());
         }
     }
 
@@ -100,11 +87,61 @@ public class MapPane extends GridPane {
         );
     }
 
-    private void switchTiles(boolean[][] mapStructure, int tileClickedX, int tileClickedY) {
+    private void addMapObject(int x, int y, MapObject mapObject) {
+        Image image = mapObject.getImage();
+        double heightToWidthRatio = image.getHeight() / image.getWidth();
+        int columnspan = mapObject.getBlocksWidth();
+        int rowspan = (int) (Math.ceil(heightToWidthRatio) * mapObject.getBlocksWidth());
+
+        MapObjectImageView imageView = new MapObjectImageView(image, y);
+
+        int topTileOfImageView;
+        double subimageHeight = image.getHeight();
+        double subimageWidth = PIXEL_BLOCK_SIZE * mapObject.getBlocksWidth();
+        boolean restrictViewPort = false;
+
+        if (imageReachesTooFarUp(y, rowspan)) {
+            topTileOfImageView = 0;
+            rowspan = y + 1;
+            subimageHeight = PIXEL_BLOCK_SIZE * rowspan;
+            restrictViewPort = true;
+        } else {
+            topTileOfImageView = y - rowspan + 1;
+        }
+
+        if (imageReachesTooFarRight(x, mapObject)) {
+            columnspan = mapTiles.length - x;
+            subimageWidth = columnspan * PIXEL_BLOCK_SIZE;
+            restrictViewPort = true;
+        }
+
+        if (restrictViewPort) {
+            imageView.restrictViewPort(subimageWidth, subimageHeight);
+        }
+
+        imageView.setFitWidth(PIXEL_BLOCK_SIZE * columnspan);
+        this.add(imageView, x, topTileOfImageView, columnspan, rowspan);
+        setValignment(imageView, VPos.BOTTOM);
+
+        applyAccessibility(mapObject.getAccessibility(), x, y);
+    }
+
+    private boolean imageReachesTooFarRight(int x, MapObject mapObject) {
+        return x + mapObject.getBlocksWidth() - 1 >= mapTiles.length;
+    }
+
+    private boolean imageReachesTooFarUp(int y, int rowspan) {
+        return y - rowspan + 1 < 0;
+    }
+
+    private void applyAccessibility(boolean[][] mapStructure, int tileClickedX, int tileClickedY) {
         boolean[][] mapArray = this.map.getArray();
 
         int yOffset = tileClickedY - mapStructure[0].length + 1;
         for (int x = 0; x < mapStructure.length; x++) {
+            if (x + tileClickedX >= mapArray.length) {
+                continue;
+            }
             for (int y = 0; y < mapStructure[0].length; y++) {
                 if (!mapStructure[x][y]) {
                     mapArray[x + tileClickedX][y + yOffset] = false;

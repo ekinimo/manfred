@@ -35,12 +35,10 @@ public class MapObjectReader {
     MapObject convert(String jsonString, String name) throws InvalidInputException, IOException {
         JSONObject jsonMapObject = new JSONObject(jsonString);
 
-        boolean[][] mapStructure = convertMapStructure(jsonMapObject.getJSONArray("mapStructure"));
-
         return new MapObject(
             name,
             jsonMapObject.getInt("blocksWidth"),
-            mapStructure,
+            convertMapStructure(jsonMapObject.getJSONArray("accessibility")),
             imageLoader.load(PATH_MAP_TILES + name + ".png")
         );
     }

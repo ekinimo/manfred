@@ -5,13 +5,13 @@ import javafx.scene.image.Image;
 public class MapObject {
     private final String name;
     private final int blocksWidth;
-    private final boolean[][] mapStructure;
+    private final boolean[][] accessibility;
     private final Image image;
 
-    public MapObject(String name, int blocksWidth, boolean[][] mapStructure, Image image) {
+    public MapObject(String name, int blocksWidth, boolean[][] accessibility, Image image) {
         this.name = name;
         this.blocksWidth = blocksWidth;
-        this.mapStructure = mapStructure;
+        this.accessibility = accessibility;
         this.image = image;
     }
 
@@ -23,8 +23,8 @@ public class MapObject {
         return blocksWidth;
     }
 
-    public boolean[][] getMapStructure() {
-        return mapStructure;
+    public boolean[][] getAccessibility() {
+        return accessibility;
     }
 
     public Image getImage() {
